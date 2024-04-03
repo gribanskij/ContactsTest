@@ -13,26 +13,25 @@ class ViewController: UIViewController {
     private var contacts:[ContactProtocol] = []{
         didSet {
             contacts.sort{ $0.title < $1.title}
+            storage.save(contacts: contacts)
         }
     }
     
-    var userDefaults = UserDefaults.standard
+    var storage: ContactStorageProtocol!
     
     @IBOutlet var tableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        storage = ContactStorage()
         loadContacts()
     }
     
     
     private func loadContacts(){
         
-        contacts.append(Contact(title: "Саня техосмотр", phone: "+7999924525235"))
-        contacts.append(Contact(title: "Владимир Анатольевич", phone: "+781235345435"))
-        contacts.append(Contact(title: "Сильвестр", phone: "+78003774744"))
+        contacts = storage.load()
 
-    
     }
     
     @IBAction func showNewContactAlert(){
